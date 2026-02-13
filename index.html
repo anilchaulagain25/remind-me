@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="Beautiful reminder app to keep you on track">
+    <title>RemindMe - Stay on Track</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    RemindMe
+                </h1>
+                <button class="btn-icon" id="addBtn" aria-label="Add reminder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 4v16m8-8H4" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Reminders Section -->
+        <section class="reminders-section">
+            <div class="section-header">
+                <h2 class="section-title">My Reminders</h2>
+                <button class="btn-icon" id="historyBtn" onclick="openHistoryModal()" aria-label="History" title="View History">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M3 12a9 9 0 0118 0" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="filter-tabs-wrapper">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="active">Active</button>
+                    <button class="filter-tab" data-filter="completed">Done</button>
+                </div>
+            </div>
+            <div class="reminders-list" id="remindersList">
+                <!-- Reminders will be inserted here -->
+            </div>
+            <div class="empty-state" id="emptyState">
+                <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>No reminders yet</p>
+                <p class="empty-subtitle">Get started with a template or create your own</p>
+                <button class="btn btn-primary" onclick="openModal()" style="margin-top: 1rem;">Create Reminder</button>
+            </div>
+        </section>
+
+        <!-- Modal for Add/Edit -->
+        <div class="modal" id="reminderModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">New Reminder</h3>
+                    <button class="btn-icon" id="closeModal" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <form id="reminderForm">
+                    <!-- Templates Section -->
+                    <div class="form-group">
+                        <label>Quick Templates</label>
+                        <div class="templates-grid" id="modalTemplatesGrid">
+                            <!-- Templates will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <div class="form-group">
+                        <label for="reminderTitle">Title</label>
+                        <input type="text" id="reminderTitle" required placeholder="e.g., Haircut">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reminderIcon">Icon</label>
+                        <div class="icon-picker" id="iconPicker">
+                            <button type="button" class="icon-option active" data-icon="✂️">✂️</button>
+                            <button type="button" class="icon-option" data-icon="🚿">🚿</button>
+                            <button type="button" class="icon-option" data-icon="💧">💧</button>
+                            <button type="button" class="icon-option" data-icon="💊">💊</button>
+                            <button type="button" class="icon-option" data-icon="🏃">🏃</button>
+                            <button type="button" class="icon-option" data-icon="📚">📚</button>
+                            <button type="button" class="icon-option" data-icon="🌟">🌟</button>
+                            <button type="button" class="icon-option" data-icon="⏰">⏰</button>
+                        </div>
+                        <input type="hidden" id="reminderIcon" value="✂️">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminderFrequency">Frequency</label>
+                        <select id="reminderFrequency" required>
+                            <option value="hourly">Every Hour</option>
+                            <option value="daily">Daily</option>
+                            <option value="every3days">Every 3 Days</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="timeGroup">
+                        <label for="reminderTime">Time</label>
+                        <input type="time" id="reminderTime" value="09:00">
+                    </div>
+
+                    <div class="form-group" id="daysGroup">
+                        <label>Days</label>
+                        <div class="day-selector">
+                            <button type="button" class="day-preset" data-preset="everyday">Every Day</button>
+                            <button type="button" class="day-preset" data-preset="weekdays">Weekdays</button>
+                            <button type="button" class="day-preset" data-preset="weekend">Weekend</button>
+                        </div>
+                        <div class="day-picker">
+                            <button type="button" class="day-option" data-day="0">S</button>
+                            <button type="button" class="day-option" data-day="1">M</button>
+                            <button type="button" class="day-option" data-day="2">T</button>
+                            <button type="button" class="day-option" data-day="3">W</button>
+                            <button type="button" class="day-option" data-day="4">T</button>
+                            <button type="button" class="day-option" data-day="5">F</button>
+                            <button type="button" class="day-option" data-day="6">S</button>
+                        </div>
+                        <input type="hidden" id="selectedDays" value="0,1,2,3,4,5,6">
+                    </div>
+
+                    <div class="form-group" id="officeHoursGroup" style="display: none;">
+                        <label>Active Hours</label>
+                        <div class="time-range">
+                            <input type="time" id="startTime" value="08:00">
+                            <span>to</span>
+                            <input type="time" id="endTime" value="17:00">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>History</h3>
+                    <button class="btn-icon" id="closeHistoryModal" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="historyContent" class="history-list">
+                    <!-- History items will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Permission Banner -->
+        <div class="notification-banner" id="notificationBanner" style="display: none;">
+            <div class="banner-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>Enable notifications to get reminders</p>
+                <button class="btn btn-small" id="enableNotifications">Enable</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
