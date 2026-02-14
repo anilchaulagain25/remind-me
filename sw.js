@@ -1,4 +1,4 @@
-const CACHE_NAME = 'remindme-v1';
+const CACHE_NAME = 'remindme-v2';
 const urlsToCache = [
     './',
     './index.html',

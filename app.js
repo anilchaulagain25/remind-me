@@ -160,14 +160,20 @@ function deleteReminder(id) {
 function toggleComplete(id) {
     const reminder = state.reminders.find(r => r.id === id);
     if (reminder) {
-        const now = new Date().toISOString();
-        reminder.completed = !reminder.completed;
-        if (reminder.completed) {
+        if (!reminder.completed) {
+            // Mark as complete
+            const now = new Date().toISOString();
+            reminder.completed = true;
             reminder.completedCount++;
             reminder.lastCompleted = now;
             // Add to history
             saveHistory(reminder, now);
+            // Calculate next due and unmark as completed
             reminder.nextDue = calculateNextDue(reminder);
+            reminder.completed = false; // Auto-unmark for next occurrence
+        } else {
+            // Undo completion
+            reminder.completed = false;
         }
         saveReminders();
         scheduleNotification(reminder);
@@ -374,6 +380,7 @@ function openModal() {
     if (!state.editingId) {
         document.getElementById('selectedDays').value = '0,1,2,3,4,5,6';
         updateDayPicker([0,1,2,3,4,5,6]);
+        handleFrequencyChange(); // Ensure proper field visibility
     }
 }
 
@@ -384,6 +391,7 @@ function closeModal() {
     document.querySelectorAll('.icon-option')[0].click();
     document.getElementById('selectedDays').value = '0,1,2,3,4,5,6';
     updateDayPicker([0,1,2,3,4,5,6]);
+    handleFrequencyChange(); // Reset field visibility
 }
 
 function editReminder(id) {

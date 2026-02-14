@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#6366f1">
     <meta name="description" content="Beautiful reminder app to keep you on track">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>RemindMe - Stay on Track</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
-    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
     <div class="app-container">
@@ -138,7 +142,7 @@
                     </div>
 
                     <div class="form-group" id="officeHoursGroup" style="display: none;">
-                        <label>Active Hours</label>
+                        <label>Active Hours (Start & End Time)</label>
                         <div class="time-range">
                             <input type="time" id="startTime" value="08:00">
                             <span>to</span>
